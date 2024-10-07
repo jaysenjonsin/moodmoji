@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 type Props = {};
 
 const DashboardPage = (props: Props) => {
-  let isAuthenticated = false;
+  let isAuthenticated = true;
   let children = <Login />;
 
   if (isAuthenticated) {

@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.textGradient {
+  background: -webkit-linear-gradient(
+    #4338ca,
+    #818cf8
+  ); /*create gradient background*/
+  -webkit-background-clip: text; /*background only applied to text, not entire element*/
+  -webkit-text-fill-color: transparent; /*makes the text transparent so background color becomes the text color*/
+}

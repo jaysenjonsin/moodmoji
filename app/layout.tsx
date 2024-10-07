@@ -16,10 +16,12 @@ export default function RootLayout({
 }>) {
   const header = (
     <header className='p-4 sm:p-8 flex items-center justify-between gap-4'>
-      <h1 className={`text-base sm:text-lg ` + Fugaz.className}>moodmoji</h1>
+      <h1 className={`text-base sm:text-lg textGradient ` + Fugaz.className}>
+        moodmoji
+      </h1>
     </header>
   );
-  const footer = <footer>foot</footer>;
+  const footer = <footer className='p-4 sm:p-8'>foot</footer>;
   return (
     <html lang='en'>
       <body
