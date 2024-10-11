@@ -2,14 +2,15 @@ import { Fugaz_One } from 'next/font/google';
 import React from 'react';
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
 
-type Props = { text: string; dark?: boolean };
+type Props = { text: string; dark?: boolean; full?: boolean };
 
-const Button = ({ text, dark }: Props) => {
+const Button = ({ text, dark, full }: Props) => {
   return (
     <button
       className={
         `rounded-full overflow-hidden border-2 duration-200 hover:opacity-60 border-solid border-indigo-600 ` +
-        (dark ? 'text-white bg-indigo-600 ' : 'text-indigo-600 ')
+        (dark ? 'text-white bg-indigo-600 ' : 'text-indigo-600 ') +
+        (full ? 'grid place-items-center w-full' : '')
       }
     >
       <p
