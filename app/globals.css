@@ -10,3 +10,12 @@
   -webkit-background-clip: text; /*background only applied to text, not entire element*/
   -webkit-text-fill-color: transparent; /*makes the text transparent so background color becomes the text color*/
 }
+
+.purpleShadow {
+  box-shadow: 3px 3px 1px 1px lavender;
+}
+
+.purpleShadow:hover {
+  transform: translate(3px, 3px); /*right 3px and down 3px to mimic button press*/
+  box-shadow: 0px 0px 1px 1px lavender; /*lighten box shadow with press*/
+}
