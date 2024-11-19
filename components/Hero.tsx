@@ -24,7 +24,7 @@ const Hero = (props: Props) => {
         <Button text='Sign Up' />
         <Button text='Login' dark />
       </div>
-      <Calendar />
+      <Calendar demo />
     </div>
   );
 };

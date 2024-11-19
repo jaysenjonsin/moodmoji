@@ -1,7 +1,10 @@
 import { Fugaz_One } from 'next/font/google';
 import React from 'react';
+import { baseRating, gradients, demoData } from '@/utils';
 
-type Props = {};
+type Props = {
+  demo: boolean;
+};
 
 const months = {
   January: 'Jan',
@@ -29,27 +32,28 @@ const dayList = [
 ];
 
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
-const Calendar = (props: Props) => {
+const Calendar = ({ demo }: Props) => {
   const year = 2024;
   const month = 'October';
   const monthNow = new Date(year, Object.keys(months).indexOf(month), 1); //first day of curr month
-  const firstDayOfMonth = monthNow.getDay(); //which day was first day
+  const firstDayOfMonth = monthNow.getDay(); //calculate day of week for first day of month
   const daysInMonth = new Date(
     year,
     Object.keys(month).indexOf(month) + 1,
     0
-  ).getDate(); //day before first of month
+  ).getDate(); //get # of days in curr month by getting the '0th' day of the next month
 
-  const daysToDisplay = firstDayOfMonth + daysInMonth;
-  const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0); //if start on ex. thurs, add on how many rows we need, if any leftovers add extra row
+  const daysToDisplay = firstDayOfMonth + daysInMonth; //days in month + blank cells at start if month doesnt start sunday
+  const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0); //if any leftovers add extra row
   return (
-    <div className='flex flex-col overflow-hidden gap-1'>
+    <div className='flex flex-col overflow-hidden gap-1 py-4 sm:py-6 md:py-10'>
       {/* make array with num rows elements -> it isnt iterable so we have to spread it and get the keys(indexes), then put in back in arr in order to map this array */}
+      {/*@ts-ignore */}
       {[...Array(numRows).keys()].map((row, rowIndex) => (
         <div key={rowIndex} className='grid grid-cols-7 gap-1'>
           {/* cant use implicit return here bc inner calculations */}
           {dayList.map((dayOfWeek, dayOfWeekIndex) => {
-            //calculate curr day
+            //calculate curr day of month for each cell
             let dayIndex =
               rowIndex * 7 + dayOfWeekIndex - (firstDayOfMonth - 1);
             //--> this determines blanks ex. if first of month wed, mon tues blank
@@ -66,14 +70,19 @@ const Calendar = (props: Props) => {
               return <div className='bg-white' key={dayOfWeekIndex} />;
             }
 
-            let color;
+            let color = demo
+              ? gradients.indigo[baseRating[dayIndex]]
+              : dayIndex in demoData
+              ? gradients.indigo[demoData[dayIndex]]
+              : 'white';
 
             return (
               <div
+                style={{ background: color }}
                 className={
                   'text-xs sm:text-sm border border-solid p-2 flex items-center gap-2 justify-between rounded-lg ' +
-                  (isToday ? 'border-indigo-400' : 'border-indigo-100') +
-                  (color === 'white' ? 'text-indigo-400' : 'text-white')
+                  (isToday ? 'border-indigo-400' : 'border-indigo-100 ') +
+                  (color === 'white' ? 'text-indigo-400 ' : 'text-white ')
                 }
                 key={dayOfWeekIndex}
               >
