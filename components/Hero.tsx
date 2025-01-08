@@ -2,6 +2,7 @@ import React from 'react';
 import { Fugaz_One } from 'next/font/google';
 import Button from './Button';
 import Calendar from './Calendar';
+import Link from 'next/link';
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
 type Props = {};
 
@@ -21,8 +22,12 @@ const Hero = (props: Props) => {
         <span className='font-semibold'>Every day of every year</span>
       </p>
       <div className='grid grid-cols-2 gap-4 w-fit mx-auto'>
-        <Button text='Sign Up' />
-        <Button text='Login' dark />
+        <Link href={'/dashboard'}>
+          <Button text='Sign Up' />
+        </Link>
+        <Link href={'/dashboard'}>
+          <Button text='Login' dark />
+        </Link>
       </div>
       <Calendar demo />
     </div>
