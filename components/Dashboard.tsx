@@ -1,10 +1,50 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import { Fugaz_One } from 'next/font/google';
 import Calendar from './Calendar';
+import { useAuth } from '../context/AuthContext';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 type Props = {};
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
 
 const Dashboard = (props: Props) => {
+  const { currentUser, userDataObj, setUserDataObj } = useAuth();
+  const [data, setData] = useState({});
+
+  function countValues() {}
+
+  async function handleSetMood(mood, day, month, year) {
+    //update curr state, update global state, update firebase
+    try {
+      const newData = { ...userDataObj };
+      if (!newData?.[year]) {
+        newData[year] = {};
+      }
+      if (!newData?.[year]?.[month]) {
+        newData[year][month] = {};
+      }
+      newData[year][month][day] = mood;
+      setData(newData);
+
+      //updating firebase
+      const docRef = doc(db, 'users', currentUser.uid);
+      const res = await setDoc(
+        docRef,
+        {
+          [year]: {
+            [month]: {
+              [day]: mood,
+            },
+          },
+        },
+        { merge: true } //merges info with curr firebase data
+      );
+    } catch (error) {
+      console.log('failed to set move');
+    }
+  }
+
   const statuses = {
     num_days: 14,
     time_remaining: '13:14:26',
@@ -18,6 +58,13 @@ const Dashboard = (props: Props) => {
     good: '😊',
     elated: '😍',
   };
+
+  useEffect(() => {
+    if (!currentUser || !userDataObj) {
+      return;
+    }
+    setData(userDataObj);
+  }, [currentUser, userDataObj]);
   return (
     <div className='flex flex-col flex-1 gap-8 sm:gap-12 md:gap-16'>
       <div className='grid grid-cols-3 p-4 gap-4 bg-indigo-50 text-indigo-500 rounded-lg'>
@@ -62,7 +109,7 @@ const Dashboard = (props: Props) => {
           </button>
         ))}
       </div>
-      <Calendar />
+      <Calendar data={data} handleSetMood={handleSetMood} />
     </div>
   );
 };

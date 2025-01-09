@@ -1,5 +1,6 @@
+'use client';
 import { Fugaz_One } from 'next/font/google';
-import React from 'react';
+import React, { useState } from 'react';
 import { baseRating, gradients, demoData } from '@/utils';
 
 type Props = {
@@ -32,14 +33,29 @@ const dayList = [
 ];
 
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
-const Calendar = ({ demo }: Props) => {
-  const year = 2024;
-  const month = 'October';
-  const monthNow = new Date(year, Object.keys(months).indexOf(month), 1); //first day of curr month
+const Calendar = ({ demo, data, handleSetMood }: Props) => {
+  const now = new Date();
+  const currMonth = now.getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(
+    Object.keys(months)[currMonth]
+  );
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+
+  function handleIncrementMonth(val){
+    //+1 or -1 val
+    //if hit bounds of months, adjust year displayed
+  }
+
+
+  const monthNow = new Date(
+    selectedYear,
+    Object.keys(months).indexOf(selectedMonth),
+    1
+  ); //first day of curr month
   const firstDayOfMonth = monthNow.getDay(); //calculate day of week for first day of month
   const daysInMonth = new Date(
-    year,
-    Object.keys(month).indexOf(month) + 1,
+    selectedYear,
+    Object.keys(selectedMonth).indexOf(selectedMonth) + 1,
     0
   ).getDate(); //get # of days in curr month by getting the '0th' day of the next month
 
