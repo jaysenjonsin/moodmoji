@@ -3,6 +3,8 @@ import React from 'react';
 import Main from '../../components/Main';
 import Dashboard from '../../components/Dashboard';
 import Login from '../../components/Login';
+import { useAuth } from '../../context/AuthContext';
+import Loading from '../../components/Loading';
 
 export const metadata: Metadata = {
   title: 'moodmoji dashboard',
@@ -10,13 +12,11 @@ export const metadata: Metadata = {
 type Props = {};
 
 const DashboardPage = (props: Props) => {
-  let isAuthenticated = true;
-  let children = <Login />;
-
-  if (isAuthenticated) {
-    children = <Dashboard />;
-  }
-  return <Main>{children}</Main>;
+  return (
+    <Main>
+      <Dashboard />
+    </Main>
+  );
 };
 
 export default DashboardPage;

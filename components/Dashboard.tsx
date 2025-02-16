@@ -5,16 +5,22 @@ import Calendar from './Calendar';
 import { useAuth } from '../context/AuthContext';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import Login from './Login';
+import Loading from './Loading';
 type Props = {};
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
 
 const Dashboard = (props: Props) => {
-  const { currentUser, userDataObj, setUserDataObj } = useAuth();
+  const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
   const [data, setData] = useState({});
 
   function countValues() {}
 
-  async function handleSetMood(mood, day, month, year) {
+  async function handleSetMood(mood) {
+    const now = new Date();
+    const day = now.getDate();
+    const month = now.getMonth();
+    const year = now.getFullYear();
     //update curr state, update global state, update firebase
     try {
       const newData = { ...userDataObj };
@@ -65,6 +71,17 @@ const Dashboard = (props: Props) => {
     }
     setData(userDataObj);
   }, [currentUser, userDataObj]);
+
+
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!currentUser) {
+    return <Login />;
+  }
+
   return (
     <div className='flex flex-col flex-1 gap-8 sm:gap-12 md:gap-16'>
       <div className='grid grid-cols-3 p-4 gap-4 bg-indigo-50 text-indigo-500 rounded-lg'>
@@ -91,6 +108,10 @@ const Dashboard = (props: Props) => {
       <div className='flex items-stretch flex-wrap gap-4'>
         {Object.keys(moods).map((mood, i) => (
           <button
+            onClick={() => {
+              const currentMoodValue = i + 1;
+              handleSetMood(currentMoodValue);
+            }}
             className={`p-4 px-5 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-200 text-center flex flex-col items-center gap-2 flex-1 `}
             key={i}
           >
