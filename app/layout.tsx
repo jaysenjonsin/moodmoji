@@ -5,6 +5,7 @@ import './globals.css';
 import { gradients, baseRating, demoData } from '@/utils/index';
 import Link from 'next/link';
 import { AuthProvider } from '../context/AuthContext';
+import Head from './head';
 
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
 const opensans = Open_Sans({ subsets: ['latin'], weight: ['400'] });
@@ -25,7 +26,6 @@ export default function RootLayout({
           moodmoji
         </h1>
       </Link>
-      <div className='flex items-center justify-between'>placeholder</div>
     </header>
   );
   const footer = (
@@ -37,18 +37,18 @@ export default function RootLayout({
   );
   return (
     <html lang='en'>
+      {/* <Head /> */}
       <AuthProvider>
-        
-      <body
-        className={
-          `w-full max-w[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800 ` +
-          opensans.className
-        }
-      >
-        {header}
-        {children}
-        {footer}
-      </body>
+        <body
+          className={
+            `w-full max-w[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800 ` +
+            opensans.className
+          }
+        >
+          {header}
+          {children}
+          {footer}
+        </body>
       </AuthProvider>
     </html>
   );

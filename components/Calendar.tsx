@@ -33,7 +33,7 @@ const dayList = [
 ];
 
 const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
-const Calendar = ({ demo, data, handleSetMood }: Props) => {
+const Calendar = ({ demo, completeData, handleSetMood }: Props) => {
   const now = new Date();
   const currMonth = now.getMonth();
   const [selectedMonth, setSelectedMonth] = useState(
@@ -41,11 +41,12 @@ const Calendar = ({ demo, data, handleSetMood }: Props) => {
   );
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
-  function handleIncrementMonth(val){
+  const numericMonth = Object.keys(months).indexOf(selectedMonth);
+  const data = completeData?.[selectedYear]?.[numericMonth] || {};
+  function handleIncrementMonth(val) {
     //+1 or -1 val
     //if hit bounds of months, adjust year displayed
   }
-
 
   const monthNow = new Date(
     selectedYear,

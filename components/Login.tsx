@@ -12,7 +12,6 @@ const Login = (props: Props) => {
   const [password, setPassword] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   const [authenticating, setAuthenticating] = useState(false);
-
   const { signup, login } = useAuth();
 
   const handleSubmit = async () => {

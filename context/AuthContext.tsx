@@ -1,36 +1,31 @@
 'use client';
-
+import { auth, db } from '@/firebase';
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import React, { useContext, useState, useEffect } from 'react';
 
-type AuthProviderProps = {
-  children: React.ReactNode;
-};
+const AuthContext = React.createContext();
 
-const AuthContext = createContext(null);
-//so we dont have to import useContext everytime we use context, instead use this useAuth hook
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userDataObj, setUserDataObj] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //auth handlers
-  function signup(email: string, password: string) {
+  // AUTH HANDLERS
+  function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
 
-  function login(email: string, password: string) {
+  function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
@@ -41,22 +36,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
+        // Set the user to our local context state
         setLoading(true);
         setCurrentUser(user);
-        if (!user) return;
-        //if user exist, fetch from firebase
+        if (!user) {
+          console.log('No User Found');
+          return;
+        }
+
+        // if user exists, fetch data from firestore database
+        console.log('Fetching User Data');
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
         let firebaseData = {};
         if (docSnap.exists()) {
-          console.log('found user data');
+          console.log('Found User Data');
           firebaseData = docSnap.data();
-          console.log('firebase data: ', firebaseData);
         }
         setUserDataObj(firebaseData);
-      } catch (err: any) {
+      } catch (err) {
         console.log(err.message);
       } finally {
         setLoading(false);
@@ -75,7 +75,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loading,
   };
 
-  return (
-    <AuthContext.Provider value={value}> {children} </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

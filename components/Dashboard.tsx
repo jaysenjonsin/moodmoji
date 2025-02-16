@@ -13,11 +13,14 @@ const fugaz = Fugaz_One({ subsets: ['latin'], weight: ['400'] });
 const Dashboard = (props: Props) => {
   const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
   const [data, setData] = useState({});
+  const now = new Date();
 
-  function countValues() {}
+  function countValues() {
+    let totalNumberOfDays = 0;
+    let sumMoods = 0;
+  }
 
   async function handleSetMood(mood) {
-    const now = new Date();
     const day = now.getDate();
     const month = now.getMonth();
     const year = now.getFullYear();
@@ -53,8 +56,8 @@ const Dashboard = (props: Props) => {
 
   const statuses = {
     num_days: 14,
-    time_remaining: '13:14:26',
-    date: new Date().toDateString(),
+    average_mood: new Date().toDateString(),
+    time_remaining: `${now.getHours()}: ${now.getMinutes()}`,
   };
 
   const moods = {
@@ -71,8 +74,6 @@ const Dashboard = (props: Props) => {
     }
     setData(userDataObj);
   }, [currentUser, userDataObj]);
-
-
 
   if (loading) {
     return <Loading />;
@@ -130,7 +131,7 @@ const Dashboard = (props: Props) => {
           </button>
         ))}
       </div>
-      <Calendar data={data} handleSetMood={handleSetMood} />
+      <Calendar completeData={data} handleSetMood={handleSetMood} />
     </div>
   );
 };
